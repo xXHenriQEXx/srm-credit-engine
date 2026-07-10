@@ -1,0 +1,51 @@
+<h1>Extrato de Liquidação</h1>
+<p class="subtitle">Histórico de transações com filtros e paginação server-side</p>
+
+<form [formGroup]="filterForm" class="filters card">
+  <input type="text" formControlName="assignorName" placeholder="Filtrar por cedente" />
+  <select formControlName="settlementCurrency">
+    <option value="">Todas as moedas</option>
+    <option value="BRL">BRL</option>
+    <option value="USD">USD</option>
+  </select>
+  <input type="date" formControlName="from" title="De" />
+  <input type="date" formControlName="to" title="Até" />
+</form>
+
+<div class="card">
+  <div *ngIf="loading" class="muted">Carregando…</div>
+  <div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
+
+  <table *ngIf="!loading && rows.length" class="grid-table">
+    <thead>
+      <tr>
+        <th>Cedente</th>
+        <th>Tipo</th>
+        <th>Valor de Face</th>
+        <th>Liquidação</th>
+        <th>Vencimento</th>
+        <th>Status</th>
+        <th>Criado em</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let tx of rows">
+        <td>{{ tx.assignorName }}</td>
+        <td>{{ tx.receivableType }}</td>
+        <td>{{ tx.faceCurrency }} {{ tx.faceValue | number: '1.2-2' }}</td>
+        <td>{{ tx.settlementCurrency }} {{ tx.settlementValue | number: '1.2-2' }}</td>
+        <td>{{ tx.dueDate }}</td>
+        <td><span class="badge" [class.settled]="tx.status === 'SETTLED'">{{ tx.status }}</span></td>
+        <td>{{ tx.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="!loading && !rows.length" class="muted">Nenhuma transação encontrada para os filtros aplicados.</p>
+
+  <div class="pagination" *ngIf="totalPages > 1">
+    <button (click)="prevPage()" [disabled]="page === 0">← Anterior</button>
+    <span>Página {{ page + 1 }} de {{ totalPages }} ({{ totalElements }} registros)</span>
+    <button (click)="nextPage()" [disabled]="page + 1 >= totalPages">Próxima →</button>
+  </div>
+</div>
