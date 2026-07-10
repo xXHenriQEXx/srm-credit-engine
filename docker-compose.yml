@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: srm-credit-engine-db
+    environment:
+      POSTGRES_DB: srm_credit_engine
+      POSTGRES_USER: srm_user
+      POSTGRES_PASSWORD: srm_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - srm_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U srm_user -d srm_credit_engine"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    container_name: srm-credit-engine-backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: srm_credit_engine
+      DB_USER: srm_user
+      DB_PASSWORD: srm_pass
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build: ./frontend
+    container_name: srm-credit-engine-frontend
+    depends_on:
+      - backend
+    ports:
+      - "4200:80"
+
+volumes:
+  srm_db_data:
