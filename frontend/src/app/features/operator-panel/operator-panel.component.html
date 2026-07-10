@@ -1,0 +1,73 @@
+<h1>Painel do Operador</h1>
+<p class="subtitle">Simule e liquide a cessão de um recebível</p>
+
+<div class="grid">
+  <form [formGroup]="form" class="card">
+    <label>
+      Cedente
+      <input type="text" formControlName="assignorName" placeholder="Nome da empresa cedente" />
+    </label>
+
+    <label>
+      Tipo de recebível
+      <select formControlName="receivableType">
+        <option value="DUPLICATA_MERCANTIL">Duplicata Mercantil</option>
+        <option value="CHEQUE_PRE_DATADO">Cheque Pré-datado</option>
+      </select>
+    </label>
+
+    <div class="row">
+      <label>
+        Valor de face
+        <input type="number" formControlName="faceValue" min="0.01" step="0.01" />
+      </label>
+      <label>
+        Moeda do título
+        <select formControlName="faceCurrency">
+          <option value="BRL">BRL</option>
+          <option value="USD">USD</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="row">
+      <label>
+        Vencimento
+        <input type="date" formControlName="dueDate" />
+      </label>
+      <label>
+        Moeda de liquidação
+        <select formControlName="settlementCurrency">
+          <option value="BRL">BRL</option>
+          <option value="USD">USD</option>
+        </select>
+      </label>
+    </div>
+
+    <button type="button" [disabled]="form.invalid || confirming" (click)="confirmSettlement()">
+      {{ confirming ? 'Confirmando...' : 'Confirmar liquidação' }}
+    </button>
+
+    <p class="success" *ngIf="confirmedId">✅ Transação liquidada com sucesso. ID: {{ confirmedId }}</p>
+    <p class="error" *ngIf="confirmError">{{ confirmError }}</p>
+  </form>
+
+  <div class="card preview">
+    <h2>Simulação em tempo real</h2>
+
+    <div *ngIf="loadingPreview" class="muted">Calculando…</div>
+    <div *ngIf="previewError" class="error">{{ previewError }}</div>
+
+    <dl *ngIf="preview && !loadingPreview">
+      <dt>Prazo</dt><dd>{{ preview.termMonths | number: '1.2-2' }} meses</dd>
+      <dt>Taxa base</dt><dd>{{ preview.baseRateApplied * 100 | number: '1.2-2' }}% a.m.</dd>
+      <dt>Spread de risco</dt><dd>{{ preview.spreadApplied * 100 | number: '1.2-2' }}% a.m.</dd>
+      <dt>Valor presente ({{ preview.faceCurrency }})</dt>
+      <dd>{{ preview.presentValueInFaceCurrency | number: '1.2-2' }}</dd>
+      <dt *ngIf="preview.faceCurrency !== preview.settlementCurrency">Taxa de câmbio</dt>
+      <dd *ngIf="preview.faceCurrency !== preview.settlementCurrency">{{ preview.exchangeRateApplied | number: '1.4-4' }}</dd>
+      <dt class="highlight">Valor líquido a pagar ({{ preview.settlementCurrency }})</dt>
+      <dd class="highlight">{{ preview.settlementValue | number: '1.2-2' }}</dd>
+    </dl>
+  </div>
+</div>
