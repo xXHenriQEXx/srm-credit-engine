@@ -1,0 +1,38 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: srm-credit-engine
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:srm_credit_engine}
+    username: ${DB_USER:srm_user}
+    password: ${DB_PASSWORD:srm_pass}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+        default_schema: public
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+pricing:
+  # Taxa base mensal (ex: proxy de CDI/SELIC) usada no motor de precificacao.
+  base-monthly-rate: 0.01
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
+logging:
+  level:
+    com.srmasset.creditengine: DEBUG
+    org.hibernate.SQL: DEBUG

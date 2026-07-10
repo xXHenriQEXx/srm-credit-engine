@@ -1,0 +1,16 @@
+# Backend
+backend/target/
+backend/.idea/
+backend/*.iml
+backend/.mvn/
+backend/mvnw
+backend/mvnw.cmd
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+
+# OS / IDE
+.DS_Store
+.vscode/
