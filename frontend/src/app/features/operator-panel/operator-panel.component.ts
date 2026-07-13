@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Subject, debounceTime, distinctUntilChanged, switchMap, takeUntil, catchError, of } from 'rxjs';
 import { CreditEngineService } from '../../core/services/credit-engine.service';
 import { PricingResult } from '../../core/models/receivable.model';
@@ -26,7 +26,7 @@ export class OperatorPanelComponent implements OnInit, OnDestroy {
   // campo rodam ANTES da atribuição de propriedades do construtor (this.fb).
   // Inicializar aqui e montar de fato no construtor evita o erro
   // TS2729 "Property 'fb' is used before its initialization".
-  form!: ReturnType<FormBuilder['group']>;
+  form!: FormGroup;
 
   preview: PricingResult | null = null;
   previewError: string | null = null;

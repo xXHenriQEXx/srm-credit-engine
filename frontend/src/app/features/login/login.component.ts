@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
 
@@ -12,7 +12,7 @@ import { AuthService } from '../../core/auth/auth.service';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  form!: ReturnType<FormBuilder['group']>;
+  form!: FormGroup;
 
   loading = false;
   errorMsg: string | null = null;

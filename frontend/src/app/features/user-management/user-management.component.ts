@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CreditEngineService } from '../../core/services/credit-engine.service';
 import { UserResponse } from '../../core/models/auth.model';
 
@@ -16,7 +16,7 @@ import { UserResponse } from '../../core/models/auth.model';
   styleUrl: './user-management.component.css'
 })
 export class UserManagementComponent {
-  form!: ReturnType<FormBuilder['group']>;
+  form!: FormGroup;
 
   creating = false;
   errorMsg: string | null = null;

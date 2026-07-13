@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { CreditEngineService } from '../../core/services/credit-engine.service';
 import { TransactionResponse } from '../../core/models/receivable.model';
@@ -22,7 +22,7 @@ export class TransactionGridComponent implements OnInit {
   // no construtor (e não como inicializador de campo) para evitar o erro
   // TS2729 causado pela ordem de inicialização de campos vs. propriedades
   // de parâmetro do construtor sob useDefineForClassFields.
-  filterForm!: ReturnType<FormBuilder['group']>;
+  filterForm!: FormGroup;
 
   rows: TransactionResponse[] = [];
   page = 0;
