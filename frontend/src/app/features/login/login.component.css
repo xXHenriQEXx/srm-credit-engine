@@ -1,0 +1,236 @@
+.login-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  background: #f4f6f8;
+}
+
+/* ---------- Lado visual (branding) ---------- */
+.login-visual {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, #0f2a4a 0%, #143d6b 55%, #1a4d8a 100%);
+  display: flex;
+  align-items: center;
+  padding: 64px;
+}
+
+.visual-glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(77, 163, 255, 0.25) 0%, transparent 70%);
+  top: -150px;
+  right: -150px;
+  pointer-events: none;
+}
+
+.visual-content {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+  max-width: 420px;
+}
+
+.logo-mark {
+  display: inline-block;
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 8px 14px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.visual-content h1 {
+  font-size: 2.4rem;
+  margin: 0 0 12px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.tagline {
+  color: #cfe0f5;
+  font-size: 1.05rem;
+  margin: 0 0 40px;
+  line-height: 1.5;
+}
+
+.highlights {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.highlights li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: #dce6f2;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.dot {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4da3ff;
+  margin-top: 6px;
+  box-shadow: 0 0 8px rgba(77, 163, 255, 0.8);
+}
+
+/* ---------- Lado do formulário ---------- */
+.login-form-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 380px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 40px 36px;
+  box-shadow: 0 4px 24px rgba(15, 42, 74, 0.08);
+}
+
+.login-card h2 {
+  margin: 0 0 8px;
+  font-size: 1.5rem;
+  color: #101d2c;
+}
+
+.subtitle {
+  color: #6b7c8f;
+  font-size: 0.9rem;
+  margin: 0 0 28px;
+  line-height: 1.4;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: #33465c;
+  margin-bottom: 18px;
+  font-weight: 500;
+}
+
+input {
+  padding: 12px 14px;
+  border: 1px solid #d5dce3;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #4da3ff;
+  box-shadow: 0 0 0 3px rgba(77, 163, 255, 0.15);
+}
+
+input.invalid {
+  border-color: #d9534f;
+}
+
+.password-wrapper {
+  position: relative;
+  display: flex;
+}
+
+.password-wrapper input {
+  flex: 1;
+  padding-right: 76px;
+}
+
+.toggle-visibility {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #4da3ff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 8px;
+}
+
+.error-banner {
+  background: #fdecea;
+  color: #b02a37;
+  font-size: 0.85rem;
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.submit-btn {
+  width: 100%;
+  background: #0f2a4a;
+  color: #fff;
+  border: none;
+  padding: 13px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s ease;
+}
+
+.submit-btn:hover:not(:disabled) { background: #143d6b; }
+.submit-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+.demo-hint {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #eef1f4;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  text-align: center;
+}
+
+.demo-hint span {
+  font-size: 0.78rem;
+  color: #8896a6;
+}
+
+.demo-hint button {
+  background: none;
+  border: 1px dashed #b7c3d0;
+  color: #33465c;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.demo-hint button:hover { background: #f4f6f8; }
+
+.footer-note {
+  margin-top: 24px;
+  color: #a7b3c0;
+  font-size: 0.78rem;
+}
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 860px) {
+  .login-page { grid-template-columns: 1fr; }
+  .login-visual { display: none; }
+}

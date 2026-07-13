@@ -1,0 +1,77 @@
+<div class="login-page">
+  <div class="login-visual">
+    <div class="visual-content">
+      <div class="logo-mark">SRM</div>
+      <h1>Credit Engine</h1>
+      <p class="tagline">Plataforma de cessão de crédito multimoedas</p>
+
+      <ul class="highlights">
+        <li>
+          <span class="dot"></span>
+          Precificação em tempo real com motor de risco por tipo de ativo
+        </li>
+        <li>
+          <span class="dot"></span>
+          Liquidação segura com garantias transacionais ACID
+        </li>
+        <li>
+          <span class="dot"></span>
+          Extrato analítico com filtros e paginação server-side
+        </li>
+      </ul>
+    </div>
+    <div class="visual-glow"></div>
+  </div>
+
+  <div class="login-form-side">
+    <div class="login-card">
+      <h2>Bem-vindo ao sistema</h2>
+      <p class="subtitle">Entre com suas credenciais para acessar o painel do operador</p>
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <label>
+          Usuário
+          <input
+            type="text"
+            formControlName="username"
+            placeholder="seu.usuario"
+            autocomplete="username"
+            [class.invalid]="form.controls.username.invalid && form.controls.username.touched"
+          />
+        </label>
+
+        <label>
+          Senha
+          <div class="password-wrapper">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="••••••••"
+              autocomplete="current-password"
+              [class.invalid]="form.controls.password.invalid && form.controls.password.touched"
+            />
+            <button type="button" class="toggle-visibility" (click)="togglePasswordVisibility()" tabindex="-1">
+              {{ showPassword ? 'Ocultar' : 'Mostrar' }}
+            </button>
+          </div>
+        </label>
+
+        <div class="error-banner" *ngIf="errorMsg">
+          ⚠ {{ errorMsg }}
+        </div>
+
+        <button type="submit" class="submit-btn" [disabled]="form.invalid || loading">
+          <span *ngIf="!loading">Entrar</span>
+          <span *ngIf="loading">Autenticando…</span>
+        </button>
+      </form>
+
+      <div class="demo-hint">
+        <span>Ambiente de teste/demonstração:</span>
+        <button type="button" (click)="fillDemoCredentials()">usar admin / admin</button>
+      </div>
+    </div>
+
+    <p class="footer-note">SRM Asset · SRM Credit Engine © 2026</p>
+  </div>
+</div>
