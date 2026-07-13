@@ -36,7 +36,7 @@
             formControlName="username"
             placeholder="seu.usuario"
             autocomplete="username"
-            [class.invalid]="form.controls.username.invalid && form.controls.username.touched"
+            [class.invalid]="form.get('username')?.invalid && form.get('username')?.touched"
           />
         </label>
 
@@ -48,7 +48,7 @@
               formControlName="password"
               placeholder="••••••••"
               autocomplete="current-password"
-              [class.invalid]="form.controls.password.invalid && form.controls.password.touched"
+              [class.invalid]="form.get('password')?.invalid && form.get('password')?.touched"
             />
             <button type="button" class="toggle-visibility" (click)="togglePasswordVisibility()" tabindex="-1">
               {{ showPassword ? 'Ocultar' : 'Mostrar' }}

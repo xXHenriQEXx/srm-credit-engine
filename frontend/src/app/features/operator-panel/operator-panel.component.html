@@ -1,16 +1,26 @@
 <h1>Painel do Operador</h1>
-<p class="subtitle">Simule e liquide a cessão de um recebível</p>
+<p class="subtitle">Preencha todos os campos para simular e liquidar a cessão de um recebível</p>
 
 <div class="grid">
   <form [formGroup]="form" class="card">
+
     <label>
       Cedente
-      <input type="text" formControlName="assignorName" placeholder="Nome da empresa cedente" />
+      <input
+        type="text"
+        formControlName="assignorName"
+        placeholder="Nome da empresa cedente"
+        [class.invalid]="form.get('assignorName')?.invalid && form.get('assignorName')?.touched"
+      />
     </label>
 
     <label>
       Tipo de recebível
-      <select formControlName="receivableType">
+      <select
+        formControlName="receivableType"
+        [class.invalid]="form.get('receivableType')?.invalid && form.get('receivableType')?.touched"
+      >
+        <option value="" disabled>Selecione o tipo...</option>
         <option value="DUPLICATA_MERCANTIL">Duplicata Mercantil</option>
         <option value="CHEQUE_PRE_DATADO">Cheque Pré-datado</option>
       </select>
@@ -19,13 +29,24 @@
     <div class="row">
       <label>
         Valor de face
-        <input type="number" formControlName="faceValue" min="0.01" step="0.01" />
+        <input
+          type="number"
+          formControlName="faceValue"
+          min="0.01"
+          step="0.01"
+          placeholder="0,00"
+          [class.invalid]="form.get('faceValue')?.invalid && form.get('faceValue')?.touched"
+        />
       </label>
       <label>
         Moeda do título
-        <select formControlName="faceCurrency">
-          <option value="BRL">BRL</option>
-          <option value="USD">USD</option>
+        <select
+          formControlName="faceCurrency"
+          [class.invalid]="form.get('faceCurrency')?.invalid && form.get('faceCurrency')?.touched"
+        >
+          <option value="" disabled>Selecione...</option>
+          <option value="BRL">BRL — Real Brasileiro</option>
+          <option value="USD">USD — Dólar Americano</option>
         </select>
       </label>
     </div>
@@ -33,13 +54,21 @@
     <div class="row">
       <label>
         Vencimento
-        <input type="date" formControlName="dueDate" />
+        <input
+          type="date"
+          formControlName="dueDate"
+          [class.invalid]="form.get('dueDate')?.invalid && form.get('dueDate')?.touched"
+        />
       </label>
       <label>
         Moeda de liquidação
-        <select formControlName="settlementCurrency">
-          <option value="BRL">BRL</option>
-          <option value="USD">USD</option>
+        <select
+          formControlName="settlementCurrency"
+          [class.invalid]="form.get('settlementCurrency')?.invalid && form.get('settlementCurrency')?.touched"
+        >
+          <option value="" disabled>Selecione...</option>
+          <option value="BRL">BRL — Real Brasileiro</option>
+          <option value="USD">USD — Dólar Americano</option>
         </select>
       </label>
     </div>
@@ -59,6 +88,11 @@
 
   <div class="card preview">
     <h2>Simulação em tempo real</h2>
+
+    <div *ngIf="!preview && !loadingPreview && !previewError" class="empty-preview">
+      <span class="empty-icon">📋</span>
+      <p>Preencha todos os campos ao lado para visualizar a simulação de precificação.</p>
+    </div>
 
     <div *ngIf="loadingPreview" class="muted">Calculando…</div>
     <div *ngIf="previewError" class="error">{{ previewError }}</div>

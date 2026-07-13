@@ -82,6 +82,10 @@ public class Transaction {
     @Column(name = "created_at", nullable = false)
     private OffsetDateTime createdAt;
 
+    /** Username do operador que registrou esta liquidacao (auditoria). */
+    @Column(name = "created_by", nullable = false, length = 60)
+    private String createdBy;
+
     @Version
     @Column(name = "version", nullable = false)
     private Long version; // otimistic locking - evita race condition em liquidacao concorrente

@@ -34,17 +34,18 @@ public class SettlementExtractController {
     }
 
     @GetMapping
-    @Operation(summary = "Extrato de liquidacao filtravel por cedente, moeda e periodo, com paginacao server-side")
+    @Operation(summary = "Extrato de liquidacao filtravel por cedente, moeda, periodo e operador, com paginacao server-side")
     public ResponseEntity<PagedResult<SettlementExtractRow>> getExtract(
             @Parameter(description = "Filtro parcial pelo nome do cedente") @RequestParam(required = false) String assignorName,
             @Parameter(description = "Codigo ISO da moeda de liquidacao (ex: USD)") @RequestParam(required = false) String settlementCurrency,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam(required = false) LocalDate from,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam(required = false) LocalDate to,
+            @Parameter(description = "Filtro parcial pelo username do operador (visivel apenas para ADMIN)") @RequestParam(required = false) String createdBy,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size
     ) {
-        var content = repository.findExtract(assignorName, settlementCurrency, from, to, page, size);
-        long total = repository.countExtract(assignorName, settlementCurrency, from, to);
+        var content = repository.findExtract(assignorName, settlementCurrency, from, to, createdBy, page, size);
+        long total = repository.countExtract(assignorName, settlementCurrency, from, to, createdBy);
         return ResponseEntity.ok(PagedResult.of(content, page, size, total));
     }
 }

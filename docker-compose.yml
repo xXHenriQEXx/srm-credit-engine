@@ -5,15 +5,15 @@ services:
     image: postgres:16-alpine
     container_name: srm-credit-engine-db
     environment:
-      POSTGRES_DB: srm_credit_engine
-      POSTGRES_USER: srm_user
-      POSTGRES_PASSWORD: srm_pass
+      POSTGRES_DB:       ${POSTGRES_DB}
+      POSTGRES_USER:     ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
       - srm_db_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U srm_user -d srm_credit_engine"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -25,13 +25,13 @@ services:
       db:
         condition: service_healthy
     environment:
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_NAME: srm_credit_engine
-      DB_USER: srm_user
-      DB_PASSWORD: srm_pass
-      JWT_SECRET: srm-credit-engine-docker-compose-dev-secret-troque-em-producao
-      JWT_EXPIRATION_MINUTES: 60
+      DB_HOST:                ${DB_HOST}
+      DB_PORT:                ${DB_PORT}
+      DB_NAME:                ${DB_NAME}
+      DB_USER:                ${DB_USER}
+      DB_PASSWORD:            ${DB_PASSWORD}
+      JWT_SECRET:             ${JWT_SECRET}
+      JWT_EXPIRATION_MINUTES: ${JWT_EXPIRATION_MINUTES}
     ports:
       - "8080:8080"
 

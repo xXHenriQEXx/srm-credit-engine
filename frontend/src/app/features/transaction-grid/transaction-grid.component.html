@@ -1,20 +1,66 @@
 <h1>Extrato de Liquidação</h1>
 <p class="subtitle">Histórico de transações com filtros e paginação server-side</p>
 
-<form [formGroup]="filterForm" class="filters card">
-  <input type="text" formControlName="assignorName" placeholder="Filtrar por cedente" />
-  <select formControlName="settlementCurrency">
-    <option value="">Todas as moedas</option>
-    <option value="BRL">BRL</option>
-    <option value="USD">USD</option>
-  </select>
-  <input type="date" formControlName="from" title="De" />
-  <input type="date" formControlName="to" title="Até" />
-</form>
+<div class="toolbar">
+  <form [formGroup]="filterForm" class="filters card">
+    <div class="filter-row">
+      <label class="filter-label">
+        <span>Cedente</span>
+        <input type="text" formControlName="assignorName" placeholder="Filtrar por cedente..." />
+      </label>
 
-<div class="card">
-  <div *ngIf="loading" class="muted">Carregando…</div>
-  <div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
+      <label class="filter-label">
+        <span>Moeda de liquidação</span>
+        <select formControlName="settlementCurrency">
+          <option value="">Todas as moedas</option>
+          <option value="BRL">BRL — Real Brasileiro</option>
+          <option value="USD">USD — Dólar Americano</option>
+        </select>
+      </label>
+
+      <label class="filter-label">
+        <span>De</span>
+        <input type="date" formControlName="from" />
+      </label>
+
+      <label class="filter-label">
+        <span>Até</span>
+        <input type="date" formControlName="to" />
+      </label>
+
+      <!-- Filtro de operador: visível exclusivamente para ADMIN -->
+      <label class="filter-label" *ngIf="isAdmin()">
+        <span>Operador</span>
+        <input type="text" formControlName="createdBy" placeholder="Filtrar por operador..." />
+      </label>
+    </div>
+  </form>
+
+  <div class="export-area">
+    <button
+      class="btn-export"
+      id="btn-export-csv"
+      (click)="exportCsv()"
+      [disabled]="exportingCsv || loading || !rows.length"
+      title="Exportar os registros filtrados como CSV"
+    >
+      <span class="export-icon" *ngIf="!exportingCsv">⬇</span>
+      <span class="export-spinner" *ngIf="exportingCsv">⏳</span>
+      {{ exportingCsv ? 'Exportando...' : 'Exportar CSV' }}
+    </button>
+    <span class="export-hint" *ngIf="totalElements > 0 && !exportingCsv">
+      {{ totalElements | number }} registro{{ totalElements !== 1 ? 's' : '' }}
+    </span>
+  </div>
+</div>
+
+<div class="card table-card">
+  <div *ngIf="loading" class="state-loading">
+    <div class="spinner"></div>
+    <span>Carregando transações…</span>
+  </div>
+
+  <div *ngIf="errorMsg && !loading" class="state-error">⚠ {{ errorMsg }}</div>
 
   <table *ngIf="!loading && rows.length" class="grid-table">
     <thead>
@@ -25,27 +71,42 @@
         <th>Liquidação</th>
         <th>Vencimento</th>
         <th>Status</th>
+        <th *ngIf="isAdmin()">Operador</th>
         <th>Criado em</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let tx of rows">
-        <td>{{ tx.assignorName }}</td>
-        <td>{{ tx.receivableType }}</td>
-        <td>{{ tx.faceCurrency }} {{ tx.faceValue | number: '1.2-2' }}</td>
-        <td>{{ tx.settlementCurrency }} {{ tx.settlementValue | number: '1.2-2' }}</td>
-        <td>{{ tx.dueDate }}</td>
-        <td><span class="badge" [class.settled]="tx.status === 'SETTLED'">{{ tx.status }}</span></td>
-        <td>{{ tx.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+        <td class="td-assignor">{{ tx.assignorName }}</td>
+        <td>
+          <span class="type-badge">
+            {{ tx.receivableType === 'DUPLICATA_MERCANTIL' ? 'Duplicata' : 'Cheque' }}
+          </span>
+        </td>
+        <td class="td-mono">{{ tx.faceCurrency }} {{ tx.faceValue | number: '1.2-2' }}</td>
+        <td class="td-mono td-settlement">{{ tx.settlementCurrency }} {{ tx.settlementValue | number: '1.2-2' }}</td>
+        <td class="td-mono">{{ tx.dueDate }}</td>
+        <td>
+          <span class="badge" [class.settled]="tx.status === 'SETTLED'" [class.pending]="tx.status === 'PENDING'" [class.cancelled]="tx.status === 'CANCELLED'">
+            {{ tx.status }}
+          </span>
+        </td>
+        <td *ngIf="isAdmin()" class="td-operator">
+          <span class="operator-chip">{{ tx.createdBy }}</span>
+        </td>
+        <td class="td-date">{{ tx.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
       </tr>
     </tbody>
   </table>
 
-  <p *ngIf="!loading && !rows.length" class="muted">Nenhuma transação encontrada para os filtros aplicados.</p>
+  <div *ngIf="!loading && !rows.length && !errorMsg" class="state-empty">
+    <span>🔍</span>
+    <p>Nenhuma transação encontrada para os filtros aplicados.</p>
+  </div>
 
   <div class="pagination" *ngIf="totalPages > 1">
-    <button (click)="prevPage()" [disabled]="page === 0">← Anterior</button>
-    <span>Página {{ page + 1 }} de {{ totalPages }} ({{ totalElements }} registros)</span>
-    <button (click)="nextPage()" [disabled]="page + 1 >= totalPages">Próxima →</button>
+    <button class="btn-page" (click)="prevPage()" [disabled]="page === 0">← Anterior</button>
+    <span class="page-info">Página <strong>{{ page + 1 }}</strong> de <strong>{{ totalPages }}</strong></span>
+    <button class="btn-page" (click)="nextPage()" [disabled]="page + 1 >= totalPages">Próxima →</button>
   </div>
 </div>

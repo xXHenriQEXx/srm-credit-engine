@@ -10,6 +10,9 @@ import { PricingResult } from '../../core/models/receivable.model';
  * real do valor liquido, via debounce sobre o formulario reativo
  * chamando o endpoint de simulacao (que NAO persiste nada).
  * A persistencia so ocorre quando o operador clica em "Confirmar liquidação".
+ *
+ * Todos os campos iniciam em branco, sem valores ou moedas pré-selecionadas,
+ * forçando o operador a preencher explicitamente cada dado antes de simular.
  */
 @Component({
   selector: 'srm-operator-panel',
@@ -37,13 +40,14 @@ export class OperatorPanelComponent implements OnInit, OnDestroy {
   confirmError: string | null = null;
 
   constructor(private fb: FormBuilder, private api: CreditEngineService) {
+    // Todos os campos iniciam sem valor — o usuário deve preencher manualmente.
     this.form = this.fb.group({
       assignorName: ['', [Validators.required, Validators.maxLength(150)]],
-      receivableType: ['DUPLICATA_MERCANTIL', Validators.required],
-      faceValue: [10000, [Validators.required, Validators.min(0.01)]],
-      faceCurrency: ['BRL', Validators.required],
-      settlementCurrency: ['BRL', Validators.required],
-      dueDate: [this.defaultDueDate(), Validators.required],
+      receivableType: ['', Validators.required],
+      faceValue: [null, [Validators.required, Validators.min(0.01)]],
+      faceCurrency: ['', Validators.required],
+      settlementCurrency: ['', Validators.required],
+      dueDate: ['', Validators.required],
     });
   }
 
@@ -55,6 +59,7 @@ export class OperatorPanelComponent implements OnInit, OnDestroy {
         switchMap(() => {
           if (this.form.invalid) {
             this.preview = null;
+            this.loadingPreview = false;
             return of(null);
           }
           this.loadingPreview = true;
@@ -73,8 +78,7 @@ export class OperatorPanelComponent implements OnInit, OnDestroy {
         if (result) this.preview = result;
       });
 
-    // dispara o primeiro calculo com os valores padrao
-    this.form.updateValueAndValidity();
+    // Não dispara preview inicial — formulário começa intencionalmente vazio.
   }
 
   ngOnDestroy(): void {
@@ -101,23 +105,18 @@ export class OperatorPanelComponent implements OnInit, OnDestroy {
   }
 
   clearForm(): void {
+    // Reseta para o estado inicial: todos os campos em branco.
     this.form.reset({
       assignorName: '',
-      receivableType: 'DUPLICATA_MERCANTIL',
-      faceValue: 10000,
-      faceCurrency: 'BRL',
-      settlementCurrency: 'BRL',
-      dueDate: this.defaultDueDate(),
+      receivableType: '',
+      faceValue: null,
+      faceCurrency: '',
+      settlementCurrency: '',
+      dueDate: '',
     });
     this.preview = null;
     this.previewError = null;
     this.confirmedId = null;
     this.confirmError = null;
-  }
-
-  private defaultDueDate(): string {
-    const d = new Date();
-    d.setDate(d.getDate() + 30);
-    return d.toISOString().substring(0, 10);
   }
 }

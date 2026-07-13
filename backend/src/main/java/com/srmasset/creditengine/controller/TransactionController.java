@@ -41,7 +41,7 @@ public class TransactionController {
         return new TransactionResponse(
                 t.getId(), t.getAssignorName(), t.getReceivableType(), t.getFaceValue(),
                 t.getFaceCurrency().getCode(), t.getSettlementCurrency().getCode(), t.getDueDate(),
-                t.getSettlementValue(), t.getStatus(), t.getCreatedAt()
+                t.getSettlementValue(), t.getStatus(), t.getCreatedAt(), t.getCreatedBy()
         );
     }
 }

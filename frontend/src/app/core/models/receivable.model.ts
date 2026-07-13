@@ -32,6 +32,7 @@ export interface TransactionResponse {
   settlementValue: number;
   status: 'PENDING' | 'SETTLED' | 'CANCELLED';
   createdAt: string;
+  createdBy: string;
 }
 
 export interface PagedResult<T> {

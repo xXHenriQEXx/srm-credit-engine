@@ -7,6 +7,8 @@ import com.srmasset.creditengine.exception.CurrencyNotFoundException;
 import com.srmasset.creditengine.exception.TransactionNotFoundException;
 import com.srmasset.creditengine.repository.CurrencyRepository;
 import com.srmasset.creditengine.repository.TransactionRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +49,8 @@ public class TransactionService {
         Currency faceCurrency = getCurrencyOrThrow(request.faceCurrency());
         Currency settlementCurrency = getCurrencyOrThrow(request.settlementCurrency());
 
+        String operator = resolveCurrentUsername();
+
         Transaction transaction = Transaction.builder()
                 .assignorName(request.assignorName())
                 .receivableType(request.receivableType())
@@ -61,6 +65,7 @@ public class TransactionService {
                 .settlementValue(pricing.settlementValue())
                 .status(TransactionStatus.SETTLED)
                 .createdAt(OffsetDateTime.now())
+                .createdBy(operator)
                 .build();
 
         return transactionRepository.save(transaction);
@@ -70,6 +75,19 @@ public class TransactionService {
     public Transaction findById(UUID id) {
         return transactionRepository.findById(id)
                 .orElseThrow(() -> new TransactionNotFoundException(id));
+    }
+
+    /**
+     * Resolve o username do principal autenticado no contexto atual.
+     * Retorna "system" como fallback para operacoes sem contexto de seguranca
+     * (ex: jobs agendados, testes de integracao sem mock de autenticacao).
+     */
+    private String resolveCurrentUsername() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && auth.getName() != null) {
+            return auth.getName();
+        }
+        return "system";
     }
 
     private Currency getCurrencyOrThrow(String code) {

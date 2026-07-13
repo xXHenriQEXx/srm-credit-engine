@@ -21,6 +21,7 @@ public record SettlementExtractRow(
         BigDecimal settlementValue,
         String status,
         LocalDate dueDate,
-        OffsetDateTime createdAt
+        OffsetDateTime createdAt,
+        String createdBy
 ) {
 }

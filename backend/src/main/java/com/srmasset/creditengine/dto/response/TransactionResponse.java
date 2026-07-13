@@ -18,6 +18,7 @@ public record TransactionResponse(
         LocalDate dueDate,
         BigDecimal settlementValue,
         TransactionStatus status,
-        OffsetDateTime createdAt
+        OffsetDateTime createdAt,
+        String createdBy
 ) {
 }

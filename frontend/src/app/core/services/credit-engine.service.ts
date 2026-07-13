@@ -27,16 +27,22 @@ export class CreditEngineService {
   }
 
   getExtract(filters: {
-    assignorName?: string; settlementCurrency?: string;
-    from?: string; to?: string; page: number; size: number;
+    assignorName?: string;
+    settlementCurrency?: string;
+    from?: string;
+    to?: string;
+    createdBy?: string;
+    page: number;
+    size: number;
   }): Observable<PagedResult<TransactionResponse>> {
     let params = new HttpParams()
       .set('page', filters.page)
       .set('size', filters.size);
-    if (filters.assignorName) params = params.set('assignorName', filters.assignorName);
+    if (filters.assignorName)       params = params.set('assignorName', filters.assignorName);
     if (filters.settlementCurrency) params = params.set('settlementCurrency', filters.settlementCurrency);
-    if (filters.from) params = params.set('from', filters.from);
-    if (filters.to) params = params.set('to', filters.to);
+    if (filters.from)               params = params.set('from', filters.from);
+    if (filters.to)                 params = params.set('to', filters.to);
+    if (filters.createdBy)          params = params.set('createdBy', filters.createdBy);
 
     return this.http.get<PagedResult<TransactionResponse>>(
       `${this.baseUrl}/reports/settlement-extract`, { params });
