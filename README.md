@@ -16,6 +16,28 @@ Plataforma de cessão de crédito multimoedas (FIDC) — teste técnico para vag
 
 Pré-requisito: Docker e Docker Compose instalados.
 
+### 1. Configurar as variáveis de ambiente
+
+O projeto usa um arquivo `.env` para não expor credenciais no `docker-compose.yml`. Copie o template e **não é necessário alterar nada** para rodar localmente:
+
+```bash
+cp .env.example .env
+```
+
+As credenciais de desenvolvimento já estão definidas no `.env.example` e são:
+
+| Variável | Valor padrão (dev) |
+|---|---|
+| `POSTGRES_USER` | `srm_user` |
+| `POSTGRES_PASSWORD` | `srm_pass` |
+| `POSTGRES_DB` | `srm_credit_engine` |
+| `JWT_SECRET` | `srm-credit-engine-docker-compose-dev-secret-troque-em-producao` |
+| `JWT_EXPIRATION_MINUTES` | `60` |
+
+> ℹ️ O arquivo `.env` está no `.gitignore` propositalmente — em produção as variáveis seriam injetadas via CI/CD (GitHub Actions secrets, AWS Secrets Manager, etc.). Para este ambiente de avaliação, basta o `cp` acima.
+
+### 2. Subir o projeto
+
 ```bash
 docker compose up --build
 ```
