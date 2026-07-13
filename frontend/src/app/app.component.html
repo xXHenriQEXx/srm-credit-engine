@@ -1,11 +1,16 @@
-<header class="topbar">
+<header class="topbar" *ngIf="showChrome()">
   <div class="brand">SRM <span>Credit Engine</span></div>
   <nav>
     <a routerLink="/painel" routerLinkActive="active">Painel do Operador</a>
     <a routerLink="/transacoes" routerLinkActive="active">Transações</a>
+    <a routerLink="/usuarios" routerLinkActive="active" *ngIf="authService.currentUser()?.role === 'ADMIN'">Usuários</a>
   </nav>
+  <div class="user-area" *ngIf="authService.currentUser() as user">
+    <span class="user-badge">{{ user.username }} · {{ user.role }}</span>
+    <button class="logout-btn" (click)="logout()">Sair</button>
+  </div>
 </header>
 
-<main class="content">
+<main class="content" [class.full-bleed]="!showChrome()">
   <router-outlet></router-outlet>
 </main>
