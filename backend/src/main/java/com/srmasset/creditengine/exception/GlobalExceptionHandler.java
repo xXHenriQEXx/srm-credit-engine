@@ -31,6 +31,22 @@ public class GlobalExceptionHandler {
         return build(HttpStatus.NOT_FOUND, ex.getMessage(), req, List.of());
     }
 
+    @ExceptionHandler(UsernameAlreadyExistsException.class)
+    public ResponseEntity<ApiError> handleConflict(RuntimeException ex, HttpServletRequest req) {
+        return build(HttpStatus.CONFLICT, ex.getMessage(), req, List.of());
+    }
+
+    @ExceptionHandler({org.springframework.security.core.AuthenticationException.class,
+            org.springframework.security.authentication.BadCredentialsException.class})
+    public ResponseEntity<ApiError> handleAuthentication(RuntimeException ex, HttpServletRequest req) {
+        return build(HttpStatus.UNAUTHORIZED, "Usuario ou senha invalidos", req, List.of());
+    }
+
+    @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
+    public ResponseEntity<ApiError> handleAccessDenied(RuntimeException ex, HttpServletRequest req) {
+        return build(HttpStatus.FORBIDDEN, "Voce nao tem permissao para executar esta acao", req, List.of());
+    }
+
     @ExceptionHandler({UnsupportedReceivableTypeException.class, ExchangeRateNotFoundException.class,
             IllegalArgumentException.class})
     public ResponseEntity<ApiError> handleBadRequest(RuntimeException ex, HttpServletRequest req) {
