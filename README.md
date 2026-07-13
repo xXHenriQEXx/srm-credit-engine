@@ -86,6 +86,25 @@ Se `faceCurrency != settlementCurrency`, o valor presente é convertido usando a
 
 Um `@RestControllerAdvice` (`GlobalExceptionHandler`) centraliza o tratamento: erros de validação viram HTTP 400 com a lista de campos inválidos, erros de negócio (moeda/taxa não encontrada, tipo de recebível não suportado) viram HTTP 404/422, conflitos de concorrência viram HTTP 409, e qualquer exceção não mapeada é convertida em HTTP 500 genérico — nunca vazamos stacktrace ou mensagens de driver JDBC para o cliente.
 
+## Autenticação (JWT)
+
+A aplicação agora exige login. Um usuário administrador é criado automaticamente pela migration `V2__add_users_and_security.sql`:
+
+```
+usuário: admin
+senha:   admin
+```
+
+- Faça login em http://localhost:4200/login — você será redirecionado para lá automaticamente ao acessar qualquer rota protegida sem sessão.
+- O backend expõe:
+  - `POST /api/v1/auth/login` — público, retorna um JWT.
+  - `POST /api/v1/auth/register` — protegido, exige um Bearer token de um usuário com role `ADMIN`. Use-o para criar novos operadores/administradores (também disponível na tela **Usuários**, visível apenas para admins logados).
+- O token é enviado em todo request subsequente via header `Authorization: Bearer <token>` (feito automaticamente pelo `authInterceptor` do frontend).
+- Expiração do token: 60 minutos por padrão (`security.jwt.expiration-minutes`, configurável por variável de ambiente `JWT_EXPIRATION_MINUTES`).
+- A chave de assinatura (`security.jwt.secret` / `JWT_SECRET`) tem um valor padrão **apenas para desenvolvimento local** — troque-a em qualquer ambiente real.
+
+⚠️ **Importante para produção**: o token JWT é guardado em `localStorage` no frontend por simplicidade. Isso é aceitável para este teste técnico, mas em um ambiente de produção real o ideal seria um cookie `httpOnly` + `SameSite=Strict` emitido pelo backend, eliminando a exposição do token a ataques XSS — mencione esse trade-off caso seja perguntado na entrevista.
+
 ## Modelagem de Dados
 
 Ver [`docs/ER-diagram.md`](docs/ER-diagram.md) (diagrama + decisões de modelagem) e [`docs/ddl.sql`](docs/ddl.sql) (script DDL completo, idêntico à migration Flyway `V1__init_schema.sql`).
