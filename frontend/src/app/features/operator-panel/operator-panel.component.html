@@ -44,9 +44,14 @@
       </label>
     </div>
 
-    <button type="button" [disabled]="form.invalid || confirming" (click)="confirmSettlement()">
-      {{ confirming ? 'Confirmando...' : 'Confirmar liquidação' }}
-    </button>
+    <div class="actions">
+      <button type="button" class="btn-primary" [disabled]="form.invalid || confirming" (click)="confirmSettlement()">
+        {{ confirming ? 'Confirmando...' : 'Confirmar liquidação' }}
+      </button>
+      <button type="button" class="btn-secondary" (click)="clearForm()">
+        Limpar campos
+      </button>
+    </div>
 
     <p class="success" *ngIf="confirmedId">✅ Transação liquidada com sucesso. ID: {{ confirmedId }}</p>
     <p class="error" *ngIf="confirmError">{{ confirmError }}</p>

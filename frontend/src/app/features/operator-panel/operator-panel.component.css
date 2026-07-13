@@ -7,6 +7,10 @@ input, select { padding: 10px; border: 1px solid #d5dce3; border-radius: 6px; fo
 .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 button { background: #0f2a4a; color: #fff; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-size: .95rem; }
 button:disabled { opacity: .5; cursor: not-allowed; }
+.actions { display: flex; gap: 12px; }
+.btn-primary { background: #0f2a4a; color: #fff; flex: 1; }
+.btn-secondary { background: #fff; color: #33465c; border: 1px solid #d5dce3 !important; }
+.btn-secondary:hover { background: #f4f6f8; }
 .success { color: #157347; margin-top: 12px; }
 .error { color: #b02a37; margin-top: 12px; }
 .muted { color: #8896a6; }

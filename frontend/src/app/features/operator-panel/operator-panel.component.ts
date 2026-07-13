@@ -100,6 +100,21 @@ export class OperatorPanelComponent implements OnInit, OnDestroy {
     });
   }
 
+  clearForm(): void {
+    this.form.reset({
+      assignorName: '',
+      receivableType: 'DUPLICATA_MERCANTIL',
+      faceValue: 10000,
+      faceCurrency: 'BRL',
+      settlementCurrency: 'BRL',
+      dueDate: this.defaultDueDate(),
+    });
+    this.preview = null;
+    this.previewError = null;
+    this.confirmedId = null;
+    this.confirmError = null;
+  }
+
   private defaultDueDate(): string {
     const d = new Date();
     d.setDate(d.getDate() + 30);
