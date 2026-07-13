@@ -21,14 +21,12 @@ import { PricingResult } from '../../core/models/receivable.model';
 export class OperatorPanelComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
-  form = this.fb.group({
-    assignorName: ['', [Validators.required, Validators.maxLength(150)]],
-    receivableType: ['DUPLICATA_MERCANTIL', Validators.required],
-    faceValue: [10000, [Validators.required, Validators.min(0.01)]],
-    faceCurrency: ['BRL', Validators.required],
-    settlementCurrency: ['BRL', Validators.required],
-    dueDate: [this.defaultDueDate(), Validators.required],
-  });
+  // Tipado explicitamente (em vez de inicializado no campo da classe) porque,
+  // com useDefineForClassFields (padrão em target ES2022), inicializadores de
+  // campo rodam ANTES da atribuição de propriedades do construtor (this.fb).
+  // Inicializar aqui e montar de fato no construtor evita o erro
+  // TS2729 "Property 'fb' is used before its initialization".
+  form!: ReturnType<FormBuilder['group']>;
 
   preview: PricingResult | null = null;
   previewError: string | null = null;
@@ -38,7 +36,16 @@ export class OperatorPanelComponent implements OnInit, OnDestroy {
   confirmedId: string | null = null;
   confirmError: string | null = null;
 
-  constructor(private fb: FormBuilder, private api: CreditEngineService) {}
+  constructor(private fb: FormBuilder, private api: CreditEngineService) {
+    this.form = this.fb.group({
+      assignorName: ['', [Validators.required, Validators.maxLength(150)]],
+      receivableType: ['DUPLICATA_MERCANTIL', Validators.required],
+      faceValue: [10000, [Validators.required, Validators.min(0.01)]],
+      faceCurrency: ['BRL', Validators.required],
+      settlementCurrency: ['BRL', Validators.required],
+      dueDate: [this.defaultDueDate(), Validators.required],
+    });
+  }
 
   ngOnInit(): void {
     this.form.valueChanges

@@ -18,12 +18,11 @@ import { TransactionResponse } from '../../core/models/receivable.model';
   styleUrl: './transaction-grid.component.css'
 })
 export class TransactionGridComponent implements OnInit {
-  filterForm = this.fb.group({
-    assignorName: [''],
-    settlementCurrency: [''],
-    from: [''],
-    to: ['']
-  });
+  // Ver comentário equivalente em OperatorPanelComponent: montamos o form
+  // no construtor (e não como inicializador de campo) para evitar o erro
+  // TS2729 causado pela ordem de inicialização de campos vs. propriedades
+  // de parâmetro do construtor sob useDefineForClassFields.
+  filterForm!: ReturnType<FormBuilder['group']>;
 
   rows: TransactionResponse[] = [];
   page = 0;
@@ -33,7 +32,14 @@ export class TransactionGridComponent implements OnInit {
   loading = false;
   errorMsg: string | null = null;
 
-  constructor(private fb: FormBuilder, private api: CreditEngineService) {}
+  constructor(private fb: FormBuilder, private api: CreditEngineService) {
+    this.filterForm = this.fb.group({
+      assignorName: [''],
+      settlementCurrency: [''],
+      from: [''],
+      to: ['']
+    });
+  }
 
   ngOnInit(): void {
     this.load();
