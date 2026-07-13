@@ -1,0 +1,39 @@
+<h1>Gestão de Usuários</h1>
+<p class="subtitle">Crie novos usuários operadores ou administradores para acessar a plataforma</p>
+
+<div class="grid">
+  <form [formGroup]="form" class="card" (ngSubmit)="submit()">
+    <label>
+      Usuário
+      <input type="text" formControlName="username" placeholder="ex: joao.silva" />
+    </label>
+    <label>
+      Senha provisória
+      <input type="password" formControlName="password" placeholder="mín. 6 caracteres" />
+    </label>
+    <label>
+      Papel
+      <select formControlName="role">
+        <option value="OPERATOR">Operador</option>
+        <option value="ADMIN">Administrador</option>
+      </select>
+    </label>
+
+    <div class="error-banner" *ngIf="errorMsg">⚠ {{ errorMsg }}</div>
+
+    <button type="submit" [disabled]="form.invalid || creating">
+      {{ creating ? 'Criando...' : 'Criar usuário' }}
+    </button>
+  </form>
+
+  <div class="card">
+    <h2>Usuários criados nesta sessão</h2>
+    <p class="muted" *ngIf="!createdUsers.length">Nenhum usuário criado ainda.</p>
+    <ul class="user-list" *ngIf="createdUsers.length">
+      <li *ngFor="let user of createdUsers">
+        <span class="username">{{ user.username }}</span>
+        <span class="badge">{{ user.role }}</span>
+      </li>
+    </ul>
+  </div>
+</div>

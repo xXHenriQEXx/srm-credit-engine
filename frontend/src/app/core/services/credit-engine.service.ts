@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import {
   PagedResult, PricingResult, ReceivableRequest, TransactionResponse
 } from '../models/receivable.model';
+import { RegisterRequest, UserResponse } from '../models/auth.model';
 
 /**
  * Camada de acesso a API. Mantida separada dos componentes para que a
@@ -39,5 +40,9 @@ export class CreditEngineService {
 
     return this.http.get<PagedResult<TransactionResponse>>(
       `${this.baseUrl}/reports/settlement-extract`, { params });
+  }
+
+  createUser(request: RegisterRequest): Observable<UserResponse> {
+    return this.http.post<UserResponse>(`${this.baseUrl}/auth/register`, request);
   }
 }
