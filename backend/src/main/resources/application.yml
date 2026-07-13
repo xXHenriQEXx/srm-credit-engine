@@ -26,6 +26,15 @@ pricing:
   # Taxa base mensal (ex: proxy de CDI/SELIC) usada no motor de precificacao.
   base-monthly-rate: 0.01
 
+security:
+  jwt:
+    # Chave de assinatura HMAC-SHA. Em producao, SEMPRE sobrescreva via
+    # variavel de ambiente JWT_SECRET com um valor forte e mantido em
+    # segredo (nunca commitado). Este valor default serve apenas para
+    # rodar o projeto localmente/nesta entrega.
+    secret: ${JWT_SECRET:srm-credit-engine-dev-secret-key-troque-em-producao-0123456789}
+    expiration-minutes: ${JWT_EXPIRATION_MINUTES:60}
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html

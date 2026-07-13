@@ -30,6 +30,8 @@ services:
       DB_NAME: srm_credit_engine
       DB_USER: srm_user
       DB_PASSWORD: srm_pass
+      JWT_SECRET: srm-credit-engine-docker-compose-dev-secret-troque-em-producao
+      JWT_EXPIRATION_MINUTES: 60
     ports:
       - "8080:8080"
 
