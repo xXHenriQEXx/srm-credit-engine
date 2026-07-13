@@ -16,17 +16,19 @@ import { UserResponse } from '../../core/models/auth.model';
   styleUrl: './user-management.component.css'
 })
 export class UserManagementComponent {
-  form = this.fb.group({
-    username: ['', [Validators.required, Validators.minLength(3)]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
-    role: ['OPERATOR', Validators.required],
-  });
+  form!: ReturnType<FormBuilder['group']>;
 
   creating = false;
   errorMsg: string | null = null;
   createdUsers: UserResponse[] = [];
 
-  constructor(private fb: FormBuilder, private api: CreditEngineService) {}
+  constructor(private fb: FormBuilder, private api: CreditEngineService) {
+    this.form = this.fb.group({
+      username: ['', [Validators.required, Validators.minLength(3)]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      role: ['OPERATOR', Validators.required],
+    });
+  }
 
   submit(): void {
     if (this.form.invalid) return;

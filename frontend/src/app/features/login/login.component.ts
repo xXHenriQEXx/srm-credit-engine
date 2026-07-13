@@ -12,10 +12,7 @@ import { AuthService } from '../../core/auth/auth.service';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  form = this.fb.group({
-    username: ['', Validators.required],
-    password: ['', Validators.required],
-  });
+  form!: ReturnType<FormBuilder['group']>;
 
   loading = false;
   errorMsg: string | null = null;
@@ -26,7 +23,12 @@ export class LoginComponent {
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) {
+    this.form = this.fb.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required],
+    });
+  }
 
   submit(): void {
     if (this.form.invalid) return;
